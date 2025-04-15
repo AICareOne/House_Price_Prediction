@@ -118,6 +118,6 @@ If you use this repository in your research, please cite the following paper:
 > **Transportmetrica B: Transport Dynamics**, 2018, IF 3.3  
 > [DOI: 10.1080/21680566.2018.1449682](https://www.tandfonline.com/doi/full/10.1080/21680566.2018.1449682)
 
----
+In our research, we examine how the connectivity provided by Singapore’s mass rapid transit (MRT) services influences the accessibility of individual buildings. This work, detailed in the paper "Equality of public transit connectivity: The influence of mass rapid transit services on individual buildings for Singapore" by Chua and Tan (2018), investigates whether public transit provides equitable access to all urban areas and how transit connectivity impacts building-level outcomes such as property values. Although HDB price prediction is only one aspect of our broader research into housing asset valuation, it exemplifies how integrating transit connectivity and other detailed location information (like street-level data and extended town aggregates) can significantly enhance predictive accuracy. For further details on alternative modeling approaches and additional features, please refer to the paper.
 
 **Feel free to explore, comment, and contribute!**
