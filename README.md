@@ -51,16 +51,32 @@ We utilize an **XGBoost Regressor** as our core predictive model. Given a large 
 - `random_state`: 42  
 - `n_jobs`: -1  
 
+
+
 ### Model Evaluation
 
 The model is evaluated using several metrics:
 
-- **MAPE**: Approximately 5.64%  
-- **MSE**: (Large numbers due to squaring errors, e.g., around 2.36 × 10⁹)  
-- **RMSE**: Roughly \$48,586  
-- **R²**: Approximately 0.94  
+- **MAPE**: Approximately 6.57%  
+- **MSE**: (Large numbers due to squaring errors, e.g., around 3.07 × 10⁹)  
+- **RMSE**: Roughly \$55442.13  
+- **R²**: Approximately 0.92  
 
 These results indicate that the model explains 94% of the variance in the HDB resale price, with relatively low average percentage error.
+
+## Probabilistic Forecasting
+
+Probabilistic forecasting extends traditional point predictions by providing a predictive distribution that captures uncertainty. In our implementation, we use **quantile regression** with XGBoost:
+
+- We train separate models for the quantiles:  
+  `quantiles = [0.05, 0.1, 0.25, 0.5, 0.75, 0.9, 0.95]`
+- A custom quantile (pinball) loss function is used during training.
+- Because house resale prices are large, the target is scaled during quantile training (e.g., divided by 100,000) and then re-scaled back to the original scale.
+  
+### Advantages of Probabilistic Forecasting
+- **Uncertainty Quantification:** Provides a prediction interval (e.g., the range from the 5th to the 95th percentile) instead of a single point estimate.
+- **Risk Assessment:** Helps stakeholders gauge potential risks by showing variability in the predictions.
+- **Enhanced Decision-Making:** Prediction intervals allow for better planning by understanding both likely and extreme outcomes.
 
 ## Feature Importance and Model Explainability
 
@@ -83,8 +99,13 @@ Because some features are correlated or overlapping (e.g., `town` and `street_na
    Place your CSV files (sourced from [Data.gov.sg](https://data.gov.sg/collections/189/view)) into the `Resale Transations/` folder.
 
 2. **Run the Training Script**  
-   The training code preprocesses the data, computes extended location features (including saving aggregated town statistics in `town_stats.joblib`), trains the XGBoost model with tuned hyperparameters, and saves the model and target encoder.
+   The training code preprocesses the data, computes extended location features (including saving aggregated town statistics in `town_stats.joblib`), trains the XGBoost point prediction model with tuned hyperparameters, and trains quantile regression models for probabilistic forecasting. The models and target encoder are then saved.
 
+With Probabilistic Prediction 
+```bash
+python model_train_propre.py
+```
+Without Probabilistic Prediction 
 ```bash
 python model_train.py
 ```
@@ -102,11 +123,17 @@ python model_train.py
    - The final feature set (after encoding)
    - The full processed input
    - The global expected (baseline) value and SHAP values showing each feature's contribution
+   - Computes quantile predictions representing the predictive range, 
+   - Visualizes the range of predictions with a fan chart.
 
+With Probabilistic Prediction 
+```bash
+python model_deploy_propre.py
+```
+Without Probabilistic Prediction 
 ```bash
 python model_deploy.py
 ```
-
 ---
 
 ## Citation of Our Paper
